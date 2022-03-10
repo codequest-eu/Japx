@@ -38,6 +38,10 @@ private struct Consts {
         static let attributes = "attributes"
         static let meta = "meta"
     }
+
+    struct OutputAPIKeys {
+        static let metaSuffix = "Meta"
+    }
     
     struct General {
         static let dictCapacity = 20
@@ -390,6 +394,10 @@ private extension JapxKit.Decoder {
                         options: options
                     )
                 }
+
+            if let relationshipMeta = relationship[Consts.APIKeys.meta] {
+                result[relationshipsKey+Consts.OutputAPIKeys.metaSuffix] = relationshipMeta
+            }
 
             let isObject = relationship[Consts.APIKeys.data].map { $0 is Parameters } ?? false
             if isObject {

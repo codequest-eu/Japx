@@ -29,6 +29,8 @@ It works by transferring `Dictionary` to `Dictionary`, so you can use [Codable][
   - [Example project](#example-project)
   - [Authors](#authors)
   - [License](#license)
+- [Codequest additionals](#codequest-additionals)
+  - [Parsing relationship meta](#parsing-relationship-meta)
 
 ## Basic example
 
@@ -536,3 +538,64 @@ Japx is available under the MIT license. See the LICENSE file for more info.
 [11]:   https://github.com/ReactiveX/RxSwift
 [12]:   https://github.com/infinum/iOS-Nuts-And-Bolts
 [13]:   https://github.com/infinum/iOS-Nuts-And-Bolts/tree/master/Catalog/Examples/Networking/Japx
+
+# Codequest additionals
+
+## Parsing relationship meta
+
+Relationships can also include metadata. The original implementation of Japx didn't make it possible. We've added additional code to parse it in a `JapxCodable` object. All you need to do is add a Codable object property named as the relationship key + "Meta" keyword.
+
+For example, for such a JSON:
+
+```
+{
+    "data": [
+        {
+            "type": "articles",
+            "id": "1",
+            "attributes": {
+                "title": "JSON API paints my bikeshed!",
+                "body": "The shortest article. Ever.",
+                "created": "2015-05-22T14:56:29.000Z",
+                "updated": "2015-05-22T14:56:28.000Z"
+            },
+            "relationships": {
+                "author": {
+                    "data": {
+                        "id": "42",
+                        "type": "people"
+                    },
+                    "meta": {
+                        "totalBooks": 2
+                    }
+                }
+            }
+        }
+    ],
+    "included": [
+        {
+            "type": "people",
+            "id": "42",
+            "attributes": {
+                "name": "John",
+                "age": 80,
+                "gender": "male"
+            }
+        }
+    ]
+}
+```
+
+A proper model for an article to get total books should be:
+```
+struct Article: JapxCodable {
+    let id: String
+    let type: String
+    let author: Author
+    let authorMeta: AuthorMeta
+}
+
+struct AuthorMeta: Codable {
+    let totalBooks: Int
+}
+```
