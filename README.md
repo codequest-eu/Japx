@@ -543,7 +543,7 @@ Japx is available under the MIT license. See the LICENSE file for more info.
 
 ## Parsing relationship meta
 
-Relationships can also include metadata. The original implementation of Japx didn't make it possible. We've added additional code to parse it in a JapxCodable object. All you need to do is add a Codable object property named as the relationship key + "Meta" keyword.
+Relationships can also include metadata. The original implementation of Japx didn't make it possible. We've added additional code to parse it in a `JapxCodable` object. All you need to do is add a Codable object property named as the relationship key + "Meta" keyword.
 
 For example, for such a JSON:
 
