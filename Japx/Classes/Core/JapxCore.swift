@@ -406,6 +406,8 @@ private extension JapxKit.Decoder {
                 result[relationshipsKey] = otherObjects
             }
         })
+
+        attributes[Consts.APIKeys.meta] = object.asDictionary(from: Consts.APIKeys.meta)
         
         if options.parseNotIncludedRelationships {
             return try attributes.merging(appendAdditionalReferences(from: relationshipsReferences, to: relationships)) { $1 }

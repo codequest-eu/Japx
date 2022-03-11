@@ -31,6 +31,7 @@ It works by transferring `Dictionary` to `Dictionary`, so you can use [Codable][
   - [License](#license)
 - [Codequest additionals](#codequest-additionals)
   - [Parsing relationship meta](#parsing-relationship-meta)
+  - [Parsing object meta](#parsing-object-meta)
 
 ## Basic example
 
@@ -597,5 +598,62 @@ struct Article: JapxCodable {
 
 struct AuthorMeta: Codable {
     let totalBooks: Int
+}
+```
+
+## Parsing object meta
+
+And object in an array can also have metadata, which is sent alongside `attributes` and `relationships`. For example:
+
+```
+{
+    "data": [
+        {
+            "type": "articles",
+            "id": "1",
+            "attributes": {
+                "title": "JSON API paints my bikeshed!",
+                "body": "The shortest article. Ever.",
+                "created": "2015-05-22T14:56:29.000Z",
+                "updated": "2015-05-22T14:56:28.000Z"
+            },
+            "relationships": {
+                "author": {
+                    "data": {
+                        "id": "42",
+                        "type": "people"
+                    }
+                }
+            },
+            "meta": {
+                "myVote": 1
+            }
+        }
+    ],
+    "included": [
+        {
+            "type": "people",
+            "id": "42",
+            "attributes": {
+                "name": "John",
+                "age": 80,
+                "gender": "male"
+            }
+        }
+    ]
+}
+```
+
+A proper model for an article to get my vote should be:
+```
+struct Article: JapxCodable {
+    let id: String
+    let type: String
+    let author: Author
+    let meta: ArticleMeta
+}
+
+struct ArticleMeta: Codable {
+    let myVote: Int
 }
 ```
